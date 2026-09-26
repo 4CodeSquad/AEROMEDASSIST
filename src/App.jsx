@@ -8,7 +8,9 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import { EMERGENCY_PHONE_HREF } from "./config";
-import { supportedLanguages, translations } from "./data/translations";
+import { translations } from "./data/translations";
+import { buildPath, parsePath } from "./routes";
+import { getPageMeta } from "./seo";
 
 const pageMap = {
   "/": Home,
@@ -17,53 +19,25 @@ const pageMap = {
   "/contact": Contact,
 };
 
-function getPageFromPath() {
-  const path = window.location.pathname.toLowerCase().replace(/\/$/, "") || "/";
-  return pageMap[path] ? path : "/";
-}
-
-function getLanguageFromUrl() {
-  const lang = new URLSearchParams(window.location.search).get("lang");
-  return supportedLanguages.includes(lang) ? lang : "en";
-}
-
-export default function App() {
-  const [page, setPage] = useState(getPageFromPath);
-  const [lang, setLang] = useState(getLanguageFromUrl);
+export default function App({ initialPage, initialLang }) {
+  const [page, setPage] = useState(initialPage);
+  const [lang, setLang] = useState(initialLang);
   const [showFloatingHelp, setShowFloatingHelp] = useState(false);
   const t = useMemo(() => translations[lang] || translations.en, [lang]);
   const Page = pageMap[page] || Home;
 
   useEffect(() => {
+    const meta = getPageMeta(page, lang);
     document.documentElement.lang = lang;
-
-    const pageTitles = {
-      "/": t.MetaHomeTitle,
-      "/about": t.MetaAboutTitle,
-      "/services": t.MetaServicesTitle,
-      "/contact": t.MetaContactTitle,
-    };
-
-    const pageDescriptions = {
-      "/": t.MetaHomeDescription,
-      "/about": t.MetaAboutDescription,
-      "/services": t.MetaServicesDescription,
-      "/contact": t.MetaContactDescription,
-    };
-
-    document.title = pageTitles[page] || "AEROMED ASSIST";
-
-    const description = document.querySelector('meta[name="description"]');
-    if (description) {
-      description.setAttribute("content", pageDescriptions[page] || t.MetaHomeDescription);
-    }
-  }, [lang, page, t]);
+    document.title = meta.title;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
+  }, [lang, page]);
 
   useEffect(() => {
     // Unknown paths (e.g. the removed /fleet page) render Home, so make the URL match.
-    const path = window.location.pathname.toLowerCase().replace(/\/$/, "") || "/";
-    if (path !== page) {
-      window.history.replaceState({}, "", `${page}?lang=${lang}${window.location.hash}`);
+    const canonicalPath = buildPath(page, lang);
+    if (window.location.pathname !== canonicalPath || window.location.search) {
+      window.history.replaceState({}, "", `${canonicalPath}${window.location.hash}`);
     }
     // Run once on load only.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -71,8 +45,8 @@ export default function App() {
 
   useEffect(() => {
     const onPopState = () => {
-      const nextPage = getPageFromPath();
-      setLang(getLanguageFromUrl());
+      const { page: nextPage, lang: nextLang } = parsePath(window.location.pathname);
+      setLang(nextLang);
 
       // In-page anchor links (e.g. #process) also fire popstate; only reset scroll on a real page change.
       if (nextPage !== page) {
@@ -95,9 +69,8 @@ export default function App() {
 
   const navigate = (path, nextLang = lang) => {
     const normalized = path === "/" ? "/" : path.replace(/\/$/, "");
-    const url = `${normalized}?lang=${nextLang}`;
 
-    window.history.pushState({}, "", url);
+    window.history.pushState({}, "", buildPath(normalized, nextLang));
     setPage(normalized);
     setLang(nextLang);
     window.scrollTo({ top: 0, behavior: "smooth" });

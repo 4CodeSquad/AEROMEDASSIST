@@ -1,0 +1,13 @@
+{
+  "name": "AEROMED ASSIST",
+  "short_name": "AEROMED",
+  "description": "24/7 international medical transport coordination: air ambulance, medical escort, repatriation and ground ambulance.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#7d020e",
+  "theme_color": "#8f0018",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

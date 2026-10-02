@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -6,7 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
-const { render, buildHead, buildSitemap, buildRobots, routes, loadAllTranslations, NOT_FOUND } = await import(
+const { render, buildHead, buildSitemap, buildRobots, pageSourceFiles, routes, loadAllTranslations, NOT_FOUND } = await import(
   pathToFileURL(path.join(ssrDir, "entry-server.js")).href
 );
 await loadAllTranslations();
@@ -37,6 +38,21 @@ function renderPage(page, lang, { notFound = false } = {}) {
   return html;
 }
 
+function git(args) {
+  try {
+    return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return "";
+  }
+}
+
+// Sitemap <lastmod> = date of the last commit touching the page's own source and locale files.
+// A shallow clone would report the clone boundary for older files, so without full history it is left out.
+const fullHistory = git(["rev-parse", "--is-shallow-repository"]) === "false";
+if (!fullHistory) console.warn("Prerender: full git history not available, sitemap <lastmod> omitted");
+const lastmodFor = (page, lang) =>
+  fullHistory ? git(["log", "-1", "--format=%cs", "--", ...pageSourceFiles(page, lang)]) || null : null;
+
 async function write(file, contents) {
   const target = path.join(dist, file);
   await fs.mkdir(path.dirname(target), { recursive: true });
@@ -48,7 +64,7 @@ for (const { page, lang, path: routePath } of routes) {
 }
 
 await write("404.html", renderPage(NOT_FOUND, "en", { notFound: true }));
-await write("sitemap.xml", buildSitemap(new Date().toISOString().slice(0, 10)));
+await write("sitemap.xml", buildSitemap(lastmodFor));
 await write("robots.txt", buildRobots());
 await fs.rm(ssrDir, { recursive: true, force: true });
 await fs.rm(path.dirname(manifestPath), { recursive: true, force: true });

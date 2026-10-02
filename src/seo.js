@@ -6,6 +6,15 @@ import { DEFAULT_LANGUAGE, NOT_FOUND, buildPath, pagePaths } from "./routes";
 const pageKeys = { "/": "Home", "/about": "About", "/services": "Services", "/contact": "Contact" };
 const ogLocales = { en: "en_US", sq: "sq_AL", it: "it_IT", de: "de_DE", fr: "fr_FR" };
 const pageTypes = { "/about": "AboutPage", "/contact": "ContactPage" };
+// Files whose last commit date becomes a page's sitemap <lastmod> (with the page's locale file).
+// Add an entry when you add a page.
+const pageSources = {
+  "/": ["src/pages/Home.jsx"],
+  "/about": ["src/pages/About.jsx"],
+  "/services": ["src/pages/Services.jsx", "src/data/services.js"],
+  "/contact": ["src/pages/Contact.jsx"],
+};
+const serviceSources = ["src/pages/ServicePage.jsx", "src/data/services.js"];
 const telephone = EMERGENCY_PHONE_HREF.replace("tel:", "");
 const allWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const orgId = `${SITE_URL}/#organization`;
@@ -172,14 +181,22 @@ export function buildHead(page, lang) {
   return { title: escapeHtml(title), description: escapeHtml(description), head: tags.join("\n    ") };
 }
 
-export function buildSitemap(lastmod) {
+export function pageSourceFiles(page, lang) {
+  const files = serviceByPath[page] ? serviceSources : pageSources[page];
+  if (!files) throw new Error(`No pageSources entry for ${page} in src/seo.js`);
+  return [...files, `src/data/locales/${lang}.js`];
+}
+
+// lastmodFor(page, lang) returns YYYY-MM-DD, or null to leave <lastmod> out.
+export function buildSitemap(lastmodFor) {
   const urls = supportedLanguages.flatMap((lang) =>
     pagePaths.filter(isIndexable).map((page) => {
       const alternates = [
         ...supportedLanguages.map((code) => `    <xhtml:link rel="alternate" hreflang="${code}" href="${pageUrl(page, code)}" />`),
         `    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl(page, DEFAULT_LANGUAGE)}" />`,
       ].join("\n");
-      return `  <url>\n    <loc>${pageUrl(page, lang)}</loc>\n    <lastmod>${lastmod}</lastmod>\n    <changefreq>monthly</changefreq>\n    <priority>${page === "/" ? "1.0" : "0.8"}</priority>\n${alternates}\n  </url>`;
+      const lastmod = lastmodFor(page, lang);
+      return `  <url>\n    <loc>${pageUrl(page, lang)}</loc>\n${lastmod ? `    <lastmod>${lastmod}</lastmod>\n` : ""}    <changefreq>monthly</changefreq>\n    <priority>${page === "/" ? "1.0" : "0.8"}</priority>\n${alternates}\n  </url>`;
     }),
   );
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import { supportedLanguages, translations } from "../data/translations";
 import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF } from "../config";
+import Logo from "./Logo";
 import NavLink from "./NavLink";
 
 export default function Header({ t, lang, page, navigate, changeLanguage }) {
@@ -42,7 +43,7 @@ export default function Header({ t, lang, page, navigate, changeLanguage }) {
         <nav className="navbar navbar-expand-lg navbar-light">
           <div className="container">
             <NavLink to="/" className="navbar-brand brand-button" {...linkProps} current={undefined}>
-              <img src="/images/aeromed-logo.png" alt="AEROMED ASSIST" />
+              <Logo />
             </NavLink>
 
             <button

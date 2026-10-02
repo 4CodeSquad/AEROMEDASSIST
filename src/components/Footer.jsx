@@ -1,5 +1,6 @@
 import { Phone, Mail } from "lucide-react";
 import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF, OPERATIONS_EMAIL } from "../config";
+import Logo from "./Logo";
 import NavLink from "./NavLink";
 
 export default function Footer({ t, lang, page, navigate }) {
@@ -10,7 +11,7 @@ export default function Footer({ t, lang, page, navigate }) {
       <div className="container">
         <div className="row g-5 py-5">
           <div className="col-lg-5">
-            <img className="footer-logo" src="/images/aeromed-logo.png" alt="AEROMED ASSIST" />
+            <Logo className="footer-logo" lazy />
             <p className="footer-copy">{t.FooterText}</p>
             <div className="availability"><span />{t.Availability}</div>
           </div>

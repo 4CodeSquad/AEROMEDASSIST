@@ -146,5 +146,6 @@ export default {
   "FaqTitle": "Pyetje të shpeshta",
   "NotFoundTitle": "Faqja nuk u gjet",
   "NotFoundText": "Faqja që kërkoni nuk ekziston ose është zhvendosur. Nëse keni nevojë për transport mjekësor urgjent, telefononi tani ekipin e operacioneve.",
-  "NotFoundLinks": "Ku të vazhdoni"
+  "NotFoundLinks": "Ku të vazhdoni",
+  "OgImageAlt": "Logoja e AEROMED ASSIST: një avion dhe një kryq mjekësor në sfond të kuq të errët"
 };

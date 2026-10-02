@@ -1,5 +1,5 @@
-import { EMERGENCY_PHONE_HREF, OPERATIONS_EMAIL, SITE_NAME, SITE_URL } from "./config";
-import { getTranslations, supportedLanguages } from "./data/i18n";
+import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF, OPERATIONS_EMAIL, SITE_NAME, SITE_URL } from "./config";
+import { getTranslations, languageNames, supportedLanguages } from "./data/i18n";
 import { serviceByPath, serviceContent, services } from "./data/services";
 import { DEFAULT_LANGUAGE, NOT_FOUND, buildPath, pagePaths } from "./routes";
 
@@ -149,6 +149,7 @@ function structuredData(page, lang) {
 
 export function buildHead(page, lang) {
   const { title, description } = getPageMeta(page, lang);
+  const imageAlt = escapeHtml(getTranslations(lang).OgImageAlt);
   const url = pageUrl(page, lang);
   const image = `${SITE_URL}/og-image.png`;
   const jsonLd = JSON.stringify(structuredData(page, lang)).replace(/</g, "\\u003c");
@@ -166,7 +167,7 @@ export function buildHead(page, lang) {
     `<meta property="og:image" content="${image}" />`,
     `<meta property="og:image:width" content="1200" />`,
     `<meta property="og:image:height" content="630" />`,
-    `<meta property="og:image:alt" content="${SITE_NAME}" />`,
+    `<meta property="og:image:alt" content="${imageAlt}" />`,
     `<meta property="og:locale" content="${ogLocales[lang]}" />`,
     ...supportedLanguages
       .filter((code) => code !== lang)
@@ -175,6 +176,7 @@ export function buildHead(page, lang) {
     `<meta name="twitter:title" content="${escapeHtml(title)}" />`,
     `<meta name="twitter:description" content="${escapeHtml(description)}" />`,
     `<meta name="twitter:image" content="${image}" />`,
+    `<meta name="twitter:image:alt" content="${imageAlt}" />`,
     `<script type="application/ld+json">${jsonLd}</script>`,
   ];
 
@@ -205,6 +207,52 @@ export function buildSitemap(lastmodFor) {
 
 export function buildRobots() {
   return `User-agent: *\nAllow: /\n\nSitemap: ${SITE_URL}/sitemap.xml\n`;
+}
+
+// /llms.txt: a plain-text summary for AI assistants, built from the same copy and config as the pages.
+export function buildLlmsTxt() {
+  const t = getTranslations(DEFAULT_LANGUAGE);
+  const link = (page) => {
+    const { title, description } = getPageMeta(page, DEFAULT_LANGUAGE);
+    return `- [${title}](${pageUrl(page, DEFAULT_LANGUAGE)}): ${description}`;
+  };
+  const corePages = ["/", "/services", "/about", "/contact"];
+
+  return [
+    `# ${SITE_NAME}`,
+    "",
+    `> ${t.MetaHomeDescription}`,
+    "",
+    t.HeroText,
+    "",
+    `- 24/7 emergency phone: ${EMERGENCY_PHONE_DISPLAY}`,
+    `- Non-urgent email and documents: ${OPERATIONS_EMAIL}`,
+    `- Urgent cases start by phone. ${t.NoWaitTitle}`,
+    `- Languages: ${supportedLanguages.map((code) => languageNames[code]).join(", ")}`,
+    // TODO(client): replace each line below with a confirmed fact, or delete it.
+    "- TODO(client): head office address and country of registration",
+    "- TODO(client): countries and regions served",
+    "- TODO(client): whether AEROMED ASSIST operates its own aircraft and ambulances or coordinates partner providers",
+    "- TODO(client): accreditations, insurer partnerships and founding year (only if confirmed and publishable)",
+    "",
+    "## Pages",
+    "",
+    ...corePages.filter(isIndexable).map(link),
+    "",
+    "## Services",
+    "",
+    ...services.map((service) => {
+      const { name, text } = serviceContent(service, t);
+      return service.indexable ? `- [${name}](${pageUrl(service.path, DEFAULT_LANGUAGE)}): ${text}` : `- ${name}: ${text}`;
+    }),
+    "",
+    "## Other languages",
+    "",
+    ...supportedLanguages
+      .filter((code) => code !== DEFAULT_LANGUAGE)
+      .map((code) => `- [${languageNames[code]}](${pageUrl("/", code)})`),
+    "",
+  ].join("\n");
 }
 
 export const routes = supportedLanguages.flatMap((lang) => pagePaths.map((page) => ({ page, lang, path: buildPath(page, lang) })));

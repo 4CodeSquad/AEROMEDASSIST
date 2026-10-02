@@ -146,5 +146,6 @@ export default {
   "FaqTitle": "Questions fréquentes",
   "NotFoundTitle": "Page introuvable",
   "NotFoundText": "La page que vous recherchez n'existe pas ou a été déplacée. Si vous avez besoin d'un transport médical urgent, appelez dès maintenant l'équipe des opérations.",
-  "NotFoundLinks": "Où aller ensuite"
+  "NotFoundLinks": "Où aller ensuite",
+  "OgImageAlt": "Logo d’AEROMED ASSIST : un avion et une croix médicale sur fond rouge foncé"
 };

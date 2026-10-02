@@ -146,5 +146,6 @@ export default {
   "FaqTitle": "Frequently asked questions",
   "NotFoundTitle": "Page not found",
   "NotFoundText": "The page you are looking for does not exist or has moved. If you need urgent medical transport, call the operations team now.",
-  "NotFoundLinks": "Where to go next"
+  "NotFoundLinks": "Where to go next",
+  "OgImageAlt": "AEROMED ASSIST logo: an aircraft and a medical cross on a dark red background"
 };

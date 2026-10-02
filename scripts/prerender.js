@@ -7,7 +7,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
-const { render, buildHead, buildSitemap, buildRobots, pageSourceFiles, routes, loadAllTranslations, NOT_FOUND } = await import(
+const { render, buildHead, buildLlmsTxt, buildSitemap, buildRobots, pageSourceFiles, routes, loadAllTranslations, NOT_FOUND } = await import(
   pathToFileURL(path.join(ssrDir, "entry-server.js")).href
 );
 await loadAllTranslations();
@@ -66,6 +66,7 @@ for (const { page, lang, path: routePath } of routes) {
 await write("404.html", renderPage(NOT_FOUND, "en", { notFound: true }));
 await write("sitemap.xml", buildSitemap(lastmodFor));
 await write("robots.txt", buildRobots());
+await write("llms.txt", buildLlmsTxt());
 await fs.rm(ssrDir, { recursive: true, force: true });
 await fs.rm(path.dirname(manifestPath), { recursive: true, force: true });
 
@@ -74,4 +75,4 @@ for (const file of await fs.readdir(dist, { recursive: true })) {
   if (path.basename(file).startsWith("._")) await fs.rm(path.join(dist, file), { force: true });
 }
 
-console.log(`Prerendered ${routes.length} pages + 404.html, sitemap.xml, robots.txt`);
+console.log(`Prerendered ${routes.length} pages + 404.html, sitemap.xml, robots.txt, llms.txt`);

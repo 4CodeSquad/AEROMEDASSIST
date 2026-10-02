@@ -1,0 +1,4 @@
+# macOS metadata files: this repo lives on a non-APFS drive, where Finder writes a ._<name>
+# sidecar next to many files. Keep them out of CLI deployments (and so out of dist/).
+._*
+.DS_Store

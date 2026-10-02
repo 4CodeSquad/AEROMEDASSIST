@@ -69,4 +69,9 @@ await write("robots.txt", buildRobots());
 await fs.rm(ssrDir, { recursive: true, force: true });
 await fs.rm(path.dirname(manifestPath), { recursive: true, force: true });
 
+// Finder writes ._<name> sidecars on non-APFS drives and Vite copies them out of public/; never ship them.
+for (const file of await fs.readdir(dist, { recursive: true })) {
+  if (path.basename(file).startsWith("._")) await fs.rm(path.join(dist, file), { force: true });
+}
+
 console.log(`Prerendered ${routes.length} pages + 404.html, sitemap.xml, robots.txt`);

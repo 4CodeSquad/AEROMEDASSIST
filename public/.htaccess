@@ -1,9 +1,39 @@
-# Serve prerendered pages at extensionless URLs (/about -> about.html, /de/services -> de/services.html).
+# Apache hosting: serve prerendered pages at extensionless URLs (/about -> about.html,
+# /de/services -> de/services.html) and redirect duplicates to that single URL.
 ErrorDocument 404 /404.html
+
+# /de is both de.html and a de/ directory; stop Apache from redirecting /de to /de/.
+DirectorySlash Off
+
 <IfModule mod_rewrite.c>
   RewriteEngine On
   RewriteBase /
+
+  # /index.html -> /
+  RewriteCond %{THE_REQUEST} \s/+index\.html[\s?] [NC]
+  RewriteRule ^ / [R=301,L]
+
+  # /about.html -> /about (only for requests from the client, not internal rewrites)
+  RewriteCond %{THE_REQUEST} \s/+([^\s?]+?)\.html[\s?] [NC]
+  RewriteCond %1 !^404$
+  RewriteRule ^ /%1 [R=301,L,NE]
+
+  # /about/ -> /about
+  RewriteCond %{REQUEST_URI} ^/(.+)/$
+  RewriteRule ^ /%1 [R=301,L,NE]
+
+  # /about -> about.html
   RewriteCond %{REQUEST_FILENAME} !-f
   RewriteCond %{REQUEST_FILENAME}.html -f
-  RewriteRule ^(.+?)/?$ $1.html [L]
+  RewriteRule ^(.+)$ $1.html [L]
+</IfModule>
+
+# Same cache policy as vercel.json.
+<IfModule mod_headers.c>
+  <If "%{REQUEST_URI} =~ m#^/(assets|fonts)/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+  <ElseIf "%{REQUEST_URI} =~ m#^/(images/|favicon\.ico$|apple-touch-icon\.png$|icon-(192|512)\.png$|og-image\.png$|site\.webmanifest$)#">
+    Header set Cache-Control "public, max-age=2592000, stale-while-revalidate=604800"
+  </ElseIf>
 </IfModule>

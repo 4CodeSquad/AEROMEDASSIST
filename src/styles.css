@@ -1,3 +1,21 @@
+/* Self-hosted variable fonts, latin subset only (covers en, sq, it, de, fr).
+   Bump the file version in the name when replacing a file: /fonts is cached as immutable. */
+@font-face {
+  font-family:'DM Sans';
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+  src:url(/fonts/dm-sans-latin-v17.woff2) format('woff2')
+}
+
+@font-face {
+  font-family:'Manrope';
+  font-style:normal;
+  font-weight:400 800;
+  font-display:swap;
+  src:url(/fonts/manrope-latin-v20.woff2) format('woff2')
+}
+
 :root {
   --wine:#8f0018;
   --wine2:#b70b2d;

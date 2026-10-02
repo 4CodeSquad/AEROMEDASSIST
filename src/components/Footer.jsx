@@ -17,14 +17,14 @@ export default function Footer({ t, lang, page, navigate }) {
           </div>
 
           <div className="col-6 col-lg-2 ms-lg-auto">
-            <h6>{t.QuickLinks}</h6>
+            <h2 className="footer-heading">{t.QuickLinks}</h2>
             <NavLink to="/about" {...linkProps}>{t.About}</NavLink>
             <NavLink to="/services" {...linkProps}>{t.Services}</NavLink>
             <NavLink to="/contact" {...linkProps}>{t.Contact}</NavLink>
           </div>
 
           <div className="col-12 col-sm-6 col-lg-3">
-            <h6>{t.EmergencyContact}</h6>
+            <h2 className="footer-heading">{t.EmergencyContact}</h2>
             <a className="footer-contact" href={EMERGENCY_PHONE_HREF}>
               <Phone size={16} aria-hidden="true" />
               <span>

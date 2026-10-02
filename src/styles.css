@@ -479,7 +479,7 @@ a {
   color:var(--wine)
 }
 
-.why-item h4 {
+.why-item h3 {
   font-size:20px;
   margin:0 0 7px
 }
@@ -599,7 +599,9 @@ a {
   margin:20px 0
 }
 
-.footer-main h6 {
+.footer-main .footer-heading {
+  font-family:inherit;
+  font-weight:500;
   font-size:12px;
   letter-spacing:.12em;
   text-transform:uppercase;
@@ -2311,7 +2313,7 @@ img, svg {
     padding:22px 0;
   }
 
-  .why-item h4 {
+  .why-item h3 {
     font-size:18px;
   }
 
@@ -2526,7 +2528,7 @@ img, svg {
     margin:16px 0;
   }
 
-  .footer-main h6 {
+  .footer-main .footer-heading {
     margin-bottom:13px;
   }
 

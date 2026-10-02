@@ -190,7 +190,7 @@ export default function Home({ t, lang, navigate }) {
                 {why.map(([number, title, text]) => (
                   <Reveal className="why-item" key={number}>
                     <span>{number}</span>
-                    <div><h4>{title}</h4><p>{text}</p></div>
+                    <div><h3>{title}</h3><p>{text}</p></div>
                   </Reveal>
                 ))}
               </div>

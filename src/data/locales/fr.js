@@ -143,5 +143,8 @@ export default {
   "DevelopedBy": "Développé par",
   "Breadcrumb": "Fil d’Ariane",
   "OtherServices": "Autres services",
-  "FaqTitle": "Questions fréquentes"
+  "FaqTitle": "Questions fréquentes",
+  "NotFoundTitle": "Page introuvable",
+  "NotFoundText": "La page que vous recherchez n'existe pas ou a été déplacée. Si vous avez besoin d'un transport médical urgent, appelez dès maintenant l'équipe des opérations.",
+  "NotFoundLinks": "Où aller ensuite"
 };

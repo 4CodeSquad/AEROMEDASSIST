@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import { languageNames, supportedLanguages } from "../data/i18n";
 import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF } from "../config";
-import { buildPath } from "../routes";
+import { NOT_FOUND, buildPath } from "../routes";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
 
@@ -80,7 +80,7 @@ export default function Header({ t, lang, page, navigate, changeLanguage }) {
                   {supportedLanguages.map((code) => (
                     <a
                       key={code}
-                      href={buildPath(page, code)}
+                      href={buildPath(page === NOT_FOUND ? "/" : page, code)}
                       hrefLang={code}
                       lang={code}
                       aria-current={code === lang ? "true" : undefined}

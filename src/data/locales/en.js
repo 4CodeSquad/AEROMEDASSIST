@@ -143,5 +143,8 @@ export default {
   "DevelopedBy": "Developed by",
   "Breadcrumb": "Breadcrumb",
   "OtherServices": "Other services",
-  "FaqTitle": "Frequently asked questions"
+  "FaqTitle": "Frequently asked questions",
+  "NotFoundTitle": "Page not found",
+  "NotFoundText": "The page you are looking for does not exist or has moved. If you need urgent medical transport, call the operations team now.",
+  "NotFoundLinks": "Where to go next"
 };

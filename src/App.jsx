@@ -8,10 +8,11 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import ServicePage from "./pages/ServicePage";
+import NotFound from "./pages/NotFound";
 import { EMERGENCY_PHONE_HREF } from "./config";
 import { serviceByPath } from "./data/services";
 import { getTranslations, loadTranslations } from "./data/i18n";
-import { buildPath, parsePath } from "./routes";
+import { NOT_FOUND, buildPath, parsePath } from "./routes";
 import { getPageMeta } from "./seo";
 
 const pageMap = {
@@ -19,6 +20,7 @@ const pageMap = {
   "/about": About,
   "/services": Services,
   "/contact": Contact,
+  [NOT_FOUND]: NotFound,
 };
 
 export default function App({ initialPage, initialLang }) {
@@ -35,16 +37,6 @@ export default function App({ initialPage, initialLang }) {
     document.title = meta.title;
     document.querySelector('meta[name="description"]')?.setAttribute("content", meta.description);
   }, [lang, page]);
-
-  useEffect(() => {
-    // Unknown paths (e.g. the removed /fleet page) render Home, so make the URL match.
-    const canonicalPath = buildPath(page, lang);
-    if (window.location.pathname !== canonicalPath || window.location.search) {
-      window.history.replaceState({}, "", `${canonicalPath}${window.location.hash}`);
-    }
-    // Run once on load only.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     const onPopState = async () => {
@@ -83,7 +75,7 @@ export default function App({ initialPage, initialLang }) {
   };
 
   const changeLanguage = (nextLang) => {
-    navigate(page, nextLang);
+    navigate(page === NOT_FOUND ? "/" : page, nextLang);
   };
 
   return (

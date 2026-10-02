@@ -6,7 +6,7 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
 const ssrDir = path.join(root, "dist-ssr");
 
-const { render, buildHead, buildSitemap, buildRobots, routes, loadAllTranslations } = await import(
+const { render, buildHead, buildSitemap, buildRobots, routes, loadAllTranslations, NOT_FOUND } = await import(
   pathToFileURL(path.join(ssrDir, "entry-server.js")).href
 );
 await loadAllTranslations();
@@ -47,7 +47,7 @@ for (const { page, lang, path: routePath } of routes) {
   await write(routePath === "/" ? "index.html" : `${routePath.slice(1)}.html`, renderPage(page, lang));
 }
 
-await write("404.html", renderPage("/", "en", { notFound: true }));
+await write("404.html", renderPage(NOT_FOUND, "en", { notFound: true }));
 await write("sitemap.xml", buildSitemap(new Date().toISOString().slice(0, 10)));
 await write("robots.txt", buildRobots());
 await fs.rm(ssrDir, { recursive: true, force: true });

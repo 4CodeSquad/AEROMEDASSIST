@@ -1,7 +1,7 @@
 import { EMERGENCY_PHONE_HREF, OPERATIONS_EMAIL, SITE_NAME, SITE_URL } from "./config";
 import { getTranslations, supportedLanguages } from "./data/i18n";
 import { serviceByPath, serviceContent, services } from "./data/services";
-import { DEFAULT_LANGUAGE, buildPath, pagePaths } from "./routes";
+import { DEFAULT_LANGUAGE, NOT_FOUND, buildPath, pagePaths } from "./routes";
 
 const pageKeys = { "/": "Home", "/about": "About", "/services": "Services", "/contact": "Contact" };
 const ogLocales = { en: "en_US", sq: "sq_AL", it: "it_IT", de: "de_DE", fr: "fr_FR" };
@@ -18,6 +18,7 @@ const escapeHtml = (value) =>
 
 export function getPageMeta(page, lang) {
   const t = getTranslations(lang);
+  if (page === NOT_FOUND) return { title: `${t.NotFoundTitle} | ${SITE_NAME}`, description: t.NotFoundText };
   const service = serviceByPath[page];
   if (service) {
     const { name, text } = serviceContent(service, t);

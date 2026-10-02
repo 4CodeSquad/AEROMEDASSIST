@@ -143,5 +143,8 @@ export default {
   "DevelopedBy": "Entwickelt von",
   "Breadcrumb": "Navigationspfad",
   "OtherServices": "Weitere Leistungen",
-  "FaqTitle": "Häufige Fragen"
+  "FaqTitle": "Häufige Fragen",
+  "NotFoundTitle": "Seite nicht gefunden",
+  "NotFoundText": "Die gesuchte Seite existiert nicht oder wurde verschoben. Wenn Sie einen dringenden medizinischen Transport benötigen, rufen Sie jetzt das Einsatzteam an.",
+  "NotFoundLinks": "Weiter zu"
 };

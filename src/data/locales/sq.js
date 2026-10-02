@@ -143,5 +143,8 @@ export default {
   "DevelopedBy": "Zhvilluar nga",
   "Breadcrumb": "Gjurma e navigimit",
   "OtherServices": "Shërbime të tjera",
-  "FaqTitle": "Pyetje të shpeshta"
+  "FaqTitle": "Pyetje të shpeshta",
+  "NotFoundTitle": "Faqja nuk u gjet",
+  "NotFoundText": "Faqja që kërkoni nuk ekziston ose është zhvendosur. Nëse keni nevojë për transport mjekësor urgjent, telefononi tani ekipin e operacioneve.",
+  "NotFoundLinks": "Ku të vazhdoni"
 };

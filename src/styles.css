@@ -1083,7 +1083,7 @@ a {
   box-shadow: 0 18px 45px rgba(14, 22, 29, 0.14);
 }
 
-.language-menu-react button {
+.language-menu-react a {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1096,13 +1096,13 @@ a {
   text-align: left;
 }
 
-.language-menu-react button:hover,
-.language-menu-react button.active {
+.language-menu-react a:hover,
+.language-menu-react a[aria-current] {
   background: #f5f1f2;
   color: #8f0018;
 }
 
-.language-menu-react button span {
+.language-menu-react a span {
   min-width: 30px;
   font-weight: 800;
   font-size: 0.78rem;
@@ -2042,7 +2042,7 @@ img, svg {
     border-radius:12px;
   }
 
-  .language-menu-react button {
+  .language-menu-react a {
     min-height:44px;
   }
 

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import { languageNames, supportedLanguages } from "../data/i18n";
 import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF } from "../config";
+import { buildPath } from "../routes";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
 
@@ -69,28 +70,32 @@ export default function Header({ t, lang, page, navigate, changeLanguage }) {
                   className="language-btn"
                   onClick={() => setLanguageOpen((value) => !value)}
                   aria-expanded={languageOpen}
+                  aria-controls="language-menu"
                 >
                   {lang.toUpperCase()} <span className="language-caret">▾</span>
                 </button>
 
-                {languageOpen && (
-                  <div className="language-menu-react">
-                    {supportedLanguages.map((code) => (
-                      <button
-                        key={code}
-                        className={code === lang ? "active" : ""}
-                        onClick={() => {
-                          changeLanguage(code);
-                          setLanguageOpen(false);
-                          setMenuOpen(false);
-                        }}
-                      >
-                        <span>{code.toUpperCase()}</span>
-                        {languageNames[code]}
-                      </button>
-                    ))}
-                  </div>
-                )}
+                {/* Always rendered (hidden when closed) so every language version is a crawlable link. */}
+                <div className="language-menu-react" id="language-menu" hidden={!languageOpen}>
+                  {supportedLanguages.map((code) => (
+                    <a
+                      key={code}
+                      href={buildPath(page, code)}
+                      hrefLang={code}
+                      lang={code}
+                      aria-current={code === lang ? "true" : undefined}
+                      onClick={(event) => {
+                        if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+                        event.preventDefault();
+                        changeLanguage(code);
+                        closeMenus();
+                      }}
+                    >
+                      <span>{code.toUpperCase()}</span>
+                      {languageNames[code]}
+                    </a>
+                  ))}
+                </div>
               </div>
 
               <a className="btn btn-brand ms-lg-3 header-call" href={EMERGENCY_PHONE_HREF}>

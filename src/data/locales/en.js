@@ -140,5 +140,8 @@ export default {
   "GroundAmbulanceDetail1": "Hospital-to-airport and airport-to-hospital transfers",
   "GroundAmbulanceDetail2": "Long-distance ground transfers when flying is not required",
   "GroundAmbulanceDetail3": "Vehicle and crew matched to the level of care the patient needs",
-  "DevelopedBy": "Developed by"
+  "DevelopedBy": "Developed by",
+  "Breadcrumb": "Breadcrumb",
+  "OtherServices": "Other services",
+  "FaqTitle": "Frequently asked questions"
 };

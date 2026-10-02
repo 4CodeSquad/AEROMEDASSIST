@@ -140,5 +140,8 @@ export default {
   "GroundAmbulanceDetail1": "Transferts hôpital-aéroport et aéroport-hôpital",
   "GroundAmbulanceDetail2": "Transferts terrestres longue distance lorsque le vol n’est pas nécessaire",
   "GroundAmbulanceDetail3": "Véhicule et équipe adaptés au niveau de soins requis par le patient",
-  "DevelopedBy": "Développé par"
+  "DevelopedBy": "Développé par",
+  "Breadcrumb": "Fil d’Ariane",
+  "OtherServices": "Autres services",
+  "FaqTitle": "Questions fréquentes"
 };

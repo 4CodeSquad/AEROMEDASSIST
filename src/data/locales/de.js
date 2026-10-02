@@ -140,5 +140,8 @@ export default {
   "GroundAmbulanceDetail1": "Transfers vom Krankenhaus zum Flughafen und vom Flughafen zum Krankenhaus",
   "GroundAmbulanceDetail2": "Bodentransfers über lange Strecken, wenn kein Flug erforderlich ist",
   "GroundAmbulanceDetail3": "Fahrzeug und Crew passend zum benötigten Versorgungsniveau",
-  "DevelopedBy": "Entwickelt von"
+  "DevelopedBy": "Entwickelt von",
+  "Breadcrumb": "Navigationspfad",
+  "OtherServices": "Weitere Leistungen",
+  "FaqTitle": "Häufige Fragen"
 };

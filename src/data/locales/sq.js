@@ -140,5 +140,8 @@ export default {
   "GroundAmbulanceDetail1": "Transferime nga spitali në aeroport dhe nga aeroporti në spital",
   "GroundAmbulanceDetail2": "Transferime tokësore në distanca të gjata kur fluturimi nuk është i nevojshëm",
   "GroundAmbulanceDetail3": "Mjeti dhe ekipi përshtaten me nivelin e kujdesit që i nevojitet pacientit",
-  "DevelopedBy": "Zhvilluar nga"
+  "DevelopedBy": "Zhvilluar nga",
+  "Breadcrumb": "Gjurma e navigimit",
+  "OtherServices": "Shërbime të tjera",
+  "FaqTitle": "Pyetje të shpeshta"
 };

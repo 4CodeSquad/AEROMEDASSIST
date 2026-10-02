@@ -1,17 +1,12 @@
-import { Ambulance, ArrowRight, CheckCircle2, Phone, Plane, ShieldCheck, Stethoscope, Route, Globe2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, Phone, ShieldCheck, Stethoscope, Route, Globe2 } from "lucide-react";
 import PlaneArt from "../components/PlaneArt";
 import Reveal from "../components/Reveal";
 import NavLink from "../components/NavLink";
+import ServiceCard from "../components/ServiceCard";
 import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF } from "../config";
+import { services } from "../data/services";
 
 export default function Home({ t, lang, navigate }) {
-  const services = [
-    [t.AirAmbulance, t.AirAmbulanceText, "01", Plane],
-    [t.MedicalEscort, t.MedicalEscortText, "02", Stethoscope],
-    [t.Repatriation, t.RepatriationText, "03", Globe2],
-    [t.GroundAmbulance, t.GroundAmbulanceText, "04", Ambulance],
-  ];
-
   const process = [
     [t.Step1, t.Step1Text],
     [t.Step2, t.Step2Text],
@@ -103,17 +98,15 @@ export default function Home({ t, lang, navigate }) {
           </div>
 
           <div className="row g-4">
-            {services.map(([title, text, number, Icon]) => (
-              <div className="col-md-6 col-xl-3" key={number}>
-                <Reveal as="article" className="service-card">
-                  <div className="card-no">{number}</div>
-                  <div className="service-icon"><Icon aria-hidden="true" /></div>
-                  <h3>{title}</h3>
-                  <p>{text}</p>
-                  <NavLink to="/services" lang={lang} navigate={navigate} className="card-link" aria-label={`${t.LearnMore}: ${title}`}>
-                    <ArrowRight size={17} aria-hidden="true" />
-                  </NavLink>
-                </Reveal>
+            {services.map((service, index) => (
+              <div className="col-md-6 col-xl-3" key={service.slug}>
+                <ServiceCard
+                  service={service}
+                  number={String(index + 1).padStart(2, "0")}
+                  t={t}
+                  lang={lang}
+                  navigate={navigate}
+                />
               </div>
             ))}
           </div>
@@ -208,7 +201,7 @@ export default function Home({ t, lang, navigate }) {
                 <div className="eyebrow light"><span />{t.GlobalKicker}</div>
                 <h2>{t.GlobalTitle}</h2>
                 <p>{t.GlobalText}</p>
-                <NavLink to="/about" lang={lang} navigate={navigate} className="btn btn-light mt-3">{t.LearnMore}</NavLink>
+                <NavLink to="/about" lang={lang} navigate={navigate} className="btn btn-light mt-3">{t.AboutTitle}</NavLink>
               </div>
               <div className="col-lg-5 ms-auto">
                 <div className="globe">

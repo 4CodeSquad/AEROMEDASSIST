@@ -140,5 +140,8 @@ export default {
   "GroundAmbulanceDetail1": "Trasferimenti ospedale-aeroporto e aeroporto-ospedale",
   "GroundAmbulanceDetail2": "Trasferimenti a terra a lunga distanza quando il volo non è necessario",
   "GroundAmbulanceDetail3": "Veicolo ed equipaggio adeguati al livello di assistenza necessario al paziente",
-  "DevelopedBy": "Sviluppato da"
+  "DevelopedBy": "Sviluppato da",
+  "Breadcrumb": "Percorso di navigazione",
+  "OtherServices": "Altri servizi",
+  "FaqTitle": "Domande frequenti"
 };

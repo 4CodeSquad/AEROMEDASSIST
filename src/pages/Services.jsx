@@ -1,17 +1,17 @@
 import { useState } from "react";
-import { Check, Phone, Plus } from "lucide-react";
+import { ArrowRight, Check, Phone, Plus } from "lucide-react";
+import NavLink from "../components/NavLink";
 import Reveal from "../components/Reveal";
 import { EMERGENCY_PHONE_HREF } from "../config";
+import { serviceContent, services as serviceList } from "../data/services";
 
-export default function Services({ t }) {
+export default function Services({ t, lang, navigate }) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const services = [
-    ["01", t.AirAmbulance, t.AirAmbulanceText, t.ServiceTagAir, [t.AirAmbulanceDetail1, t.AirAmbulanceDetail2, t.AirAmbulanceDetail3]],
-    ["02", t.MedicalEscort, t.MedicalEscortText, t.ServiceTagEscort, [t.MedicalEscortDetail1, t.MedicalEscortDetail2, t.MedicalEscortDetail3]],
-    ["03", t.Repatriation, t.RepatriationText, t.ServiceTagRepatriation, [t.RepatriationDetail1, t.RepatriationDetail2, t.RepatriationDetail3]],
-    ["04", t.GroundAmbulance, t.GroundAmbulanceText, t.ServiceTagGround, [t.GroundAmbulanceDetail1, t.GroundAmbulanceDetail2, t.GroundAmbulanceDetail3]],
-  ];
+  const services = serviceList.map((service, index) => {
+    const { name, text, tag, details } = serviceContent(service, t);
+    return [String(index + 1).padStart(2, "0"), name, text, tag, details, service.path];
+  });
 
   const toggle = (index) => setOpenIndex((current) => (current === index ? -1 : index));
 
@@ -31,7 +31,7 @@ export default function Services({ t }) {
 
       <section className="section-pad">
         <div className="container services-stack">
-          {services.map(([number, title, text, tag, details], index) => {
+          {services.map(([number, title, text, tag, details, path], index) => {
             const open = openIndex === index;
             const detailsId = `service-details-${number}`;
 
@@ -42,6 +42,10 @@ export default function Services({ t }) {
                   <small>{tag}</small>
                   <h2>{title}</h2>
                   <p>{text}</p>
+                  <NavLink to={path} lang={lang} navigate={navigate} className="service-page-link">
+                    {t.LearnMore}: {title}
+                    <ArrowRight size={16} aria-hidden="true" />
+                  </NavLink>
                 </div>
                 <button
                   type="button"

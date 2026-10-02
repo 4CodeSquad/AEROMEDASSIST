@@ -1,5 +1,6 @@
 import { EMERGENCY_PHONE_HREF, OPERATIONS_EMAIL, SITE_NAME, SITE_URL } from "./config";
 import { getTranslations, supportedLanguages } from "./data/i18n";
+import { serviceByPath, serviceContent, services } from "./data/services";
 import { DEFAULT_LANGUAGE, buildPath, pagePaths } from "./routes";
 
 const pageKeys = { "/": "Home", "/about": "About", "/services": "Services", "/contact": "Contact" };
@@ -7,6 +8,8 @@ const ogLocales = { en: "en_US", sq: "sq_AL", it: "it_IT", de: "de_DE", fr: "fr_
 const pageTypes = { "/about": "AboutPage", "/contact": "ContactPage" };
 const telephone = EMERGENCY_PHONE_HREF.replace("tel:", "");
 const allWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const orgId = `${SITE_URL}/#organization`;
+const websiteId = `${SITE_URL}/#website`;
 
 const absoluteUrl = (path) => `${SITE_URL}${path}`;
 const pageUrl = (page, lang) => absoluteUrl(buildPath(page, lang));
@@ -15,8 +18,34 @@ const escapeHtml = (value) =>
 
 export function getPageMeta(page, lang) {
   const t = getTranslations(lang);
+  const service = serviceByPath[page];
+  if (service) {
+    const { name, text } = serviceContent(service, t);
+    // TODO(client): keyword-led title/description per service once the target searches are confirmed.
+    return { title: `${name} | ${SITE_NAME}`, description: text };
+  }
   const key = pageKeys[page] || "Home";
   return { title: t[`Meta${key}Title`], description: t[`Meta${key}Description`] };
+}
+
+// Pages that are not ready for search (see src/data/services.js) get noindex and stay out of the sitemap.
+export const isIndexable = (page) => serviceByPath[page]?.indexable ?? true;
+
+function serviceNode(service, t, lang) {
+  const { name, text } = serviceContent(service, t);
+  const url = pageUrl(service.path, lang);
+  return {
+    "@type": "Service",
+    "@id": `${url}#service`,
+    name,
+    description: text,
+    serviceType: service.serviceType,
+    provider: { "@id": orgId },
+    // TODO(client): confirm the real service area (countries/regions) and replace "Worldwide".
+    areaServed: "Worldwide",
+    availableChannel: { "@type": "ServiceChannel", servicePhone: { "@type": "ContactPoint", telephone }, availableLanguage: supportedLanguages },
+    url,
+  };
 }
 
 function structuredData(page, lang) {
@@ -24,8 +53,7 @@ function structuredData(page, lang) {
   const { title, description } = getPageMeta(page, lang);
   const url = pageUrl(page, lang);
   const homeUrl = pageUrl("/", lang);
-  const orgId = `${SITE_URL}/#organization`;
-  const websiteId = `${SITE_URL}/#website`;
+  const service = serviceByPath[page];
 
   const graph = [
     {
@@ -71,38 +99,39 @@ function structuredData(page, lang) {
       about: { "@id": orgId },
       primaryImageOfPage: `${SITE_URL}/og-image.png`,
       ...(page !== "/" && { breadcrumb: { "@id": `${url}#breadcrumb` } }),
+      ...(service && { mainEntity: { "@id": `${url}#service` } }),
     },
   ];
 
   if (page !== "/") {
+    const crumbs = [[t.Home, homeUrl]];
+    if (service) crumbs.push([t.Services, pageUrl("/services", lang)]);
+    crumbs.push([service ? serviceContent(service, t).name : t[pageKeys[page]], url]);
     graph.push({
       "@type": "BreadcrumbList",
       "@id": `${url}#breadcrumb`,
-      itemListElement: [
-        { "@type": "ListItem", position: 1, name: t.Home, item: homeUrl },
-        { "@type": "ListItem", position: 2, name: t[pageKeys[page]], item: url },
-      ],
+      itemListElement: crumbs.map(([name, item], index) => ({ "@type": "ListItem", position: index + 1, name, item })),
     });
   }
 
   if (page === "/services") {
-    [
-      [t.AirAmbulance, t.AirAmbulanceText, "Air ambulance"],
-      [t.MedicalEscort, t.MedicalEscortText, "Medical escort"],
-      [t.Repatriation, t.RepatriationText, "Medical repatriation"],
-      [t.GroundAmbulance, t.GroundAmbulanceText, "Ground ambulance"],
-    ].forEach(([name, serviceDescription, serviceType]) => {
+    graph.push(...services.map((item) => serviceNode(item, t, lang)));
+  }
+
+  if (service) {
+    graph.push(serviceNode(service, t, lang));
+    const { faq } = serviceContent(service, t);
+    if (faq.length) {
       graph.push({
-        "@type": "Service",
-        name,
-        description: serviceDescription,
-        serviceType,
-        provider: { "@id": orgId },
-        areaServed: "Worldwide",
-        availableChannel: { "@type": "ServiceChannel", servicePhone: { "@type": "ContactPoint", telephone }, availableLanguage: supportedLanguages },
-        url,
+        "@type": "FAQPage",
+        "@id": `${url}#faq`,
+        mainEntity: faq.map(({ question, answer }) => ({
+          "@type": "Question",
+          name: question,
+          acceptedAnswer: { "@type": "Answer", text: answer },
+        })),
       });
-    });
+    }
   }
 
   return { "@context": "https://schema.org", "@graph": graph };
@@ -115,7 +144,7 @@ export function buildHead(page, lang) {
   const jsonLd = JSON.stringify(structuredData(page, lang)).replace(/</g, "\\u003c");
 
   const tags = [
-    `<meta name="robots" content="index, follow, max-image-preview:large" />`,
+    `<meta name="robots" content="${isIndexable(page) ? "index, follow, max-image-preview:large" : "noindex, follow"}" />`,
     `<link rel="canonical" href="${url}" />`,
     ...supportedLanguages.map((code) => `<link rel="alternate" hreflang="${code}" href="${pageUrl(page, code)}" />`),
     `<link rel="alternate" hreflang="x-default" href="${pageUrl(page, DEFAULT_LANGUAGE)}" />`,
@@ -144,7 +173,7 @@ export function buildHead(page, lang) {
 
 export function buildSitemap(lastmod) {
   const urls = supportedLanguages.flatMap((lang) =>
-    pagePaths.map((page) => {
+    pagePaths.filter(isIndexable).map((page) => {
       const alternates = [
         ...supportedLanguages.map((code) => `    <xhtml:link rel="alternate" hreflang="${code}" href="${pageUrl(page, code)}" />`),
         `    <xhtml:link rel="alternate" hreflang="x-default" href="${pageUrl(page, DEFAULT_LANGUAGE)}" />`,

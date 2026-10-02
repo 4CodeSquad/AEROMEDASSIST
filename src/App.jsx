@@ -7,7 +7,9 @@ import Home from "./pages/Home";
 import About from "./pages/About";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
+import ServicePage from "./pages/ServicePage";
 import { EMERGENCY_PHONE_HREF } from "./config";
+import { serviceByPath } from "./data/services";
 import { getTranslations, loadTranslations } from "./data/i18n";
 import { buildPath, parsePath } from "./routes";
 import { getPageMeta } from "./seo";
@@ -24,7 +26,8 @@ export default function App({ initialPage, initialLang }) {
   const [lang, setLang] = useState(initialLang);
   const [showFloatingHelp, setShowFloatingHelp] = useState(false);
   const t = getTranslations(lang);
-  const Page = pageMap[page] || Home;
+  const service = serviceByPath[page];
+  const Page = service ? ServicePage : pageMap[page] || Home;
 
   useEffect(() => {
     const meta = getPageMeta(page, lang);
@@ -94,7 +97,7 @@ export default function App({ initialPage, initialLang }) {
       />
 
       <main>
-        <Page t={t} lang={lang} navigate={navigate} />
+        <Page t={t} lang={lang} navigate={navigate} service={service} />
       </main>
 
       <Footer t={t} lang={lang} page={page} navigate={navigate} />

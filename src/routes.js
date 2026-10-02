@@ -1,7 +1,8 @@
 import { supportedLanguages } from "./data/i18n";
+import { services } from "./data/services";
 
 export const DEFAULT_LANGUAGE = "en";
-export const pagePaths = ["/", "/about", "/services", "/contact"];
+export const pagePaths = ["/", "/about", "/services", ...services.map((service) => service.path), "/contact"];
 
 export function buildPath(page, lang) {
   if (lang === DEFAULT_LANGUAGE) return page;

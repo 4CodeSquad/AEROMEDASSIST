@@ -1,5 +1,5 @@
 import { EMERGENCY_PHONE_HREF, OPERATIONS_EMAIL, SITE_NAME, SITE_URL } from "./config";
-import { supportedLanguages, translations } from "./data/translations";
+import { getTranslations, supportedLanguages } from "./data/i18n";
 import { DEFAULT_LANGUAGE, buildPath, pagePaths } from "./routes";
 
 const pageKeys = { "/": "Home", "/about": "About", "/services": "Services", "/contact": "Contact" };
@@ -14,13 +14,13 @@ const escapeHtml = (value) =>
   String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
 export function getPageMeta(page, lang) {
-  const t = translations[lang] || translations[DEFAULT_LANGUAGE];
+  const t = getTranslations(lang);
   const key = pageKeys[page] || "Home";
   return { title: t[`Meta${key}Title`], description: t[`Meta${key}Description`] };
 }
 
 function structuredData(page, lang) {
-  const t = translations[lang];
+  const t = getTranslations(lang);
   const { title, description } = getPageMeta(page, lang);
   const url = pageUrl(page, lang);
   const homeUrl = pageUrl("/", lang);
@@ -35,7 +35,7 @@ function structuredData(page, lang) {
       url: `${SITE_URL}/`,
       logo: { "@type": "ImageObject", url: `${SITE_URL}/images/aeromed-logo.png`, width: 631, height: 316 },
       image: `${SITE_URL}/og-image.png`,
-      description: translations[DEFAULT_LANGUAGE].MetaHomeDescription,
+      description: getTranslations(DEFAULT_LANGUAGE).MetaHomeDescription,
       email: OPERATIONS_EMAIL,
       telephone,
       areaServed: "Worldwide",

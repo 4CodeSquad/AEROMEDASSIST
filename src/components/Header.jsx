@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
-import { supportedLanguages, translations } from "../data/translations";
+import { languageNames, supportedLanguages } from "../data/i18n";
 import { EMERGENCY_PHONE_DISPLAY, EMERGENCY_PHONE_HREF } from "../config";
 import Logo from "./Logo";
 import NavLink from "./NavLink";
@@ -86,7 +86,7 @@ export default function Header({ t, lang, page, navigate, changeLanguage }) {
                         }}
                       >
                         <span>{code.toUpperCase()}</span>
-                        {translations[code].LanguageName}
+                        {languageNames[code]}
                       </button>
                     ))}
                   </div>

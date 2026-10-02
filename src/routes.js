@@ -1,4 +1,4 @@
-import { supportedLanguages } from "./data/translations";
+import { supportedLanguages } from "./data/i18n";
 
 export const DEFAULT_LANGUAGE = "en";
 export const pagePaths = ["/", "/about", "/services", "/contact"];

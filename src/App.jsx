@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Phone } from "lucide-react";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -8,7 +8,7 @@ import About from "./pages/About";
 import Services from "./pages/Services";
 import Contact from "./pages/Contact";
 import { EMERGENCY_PHONE_HREF } from "./config";
-import { translations } from "./data/translations";
+import { getTranslations, loadTranslations } from "./data/i18n";
 import { buildPath, parsePath } from "./routes";
 import { getPageMeta } from "./seo";
 
@@ -23,7 +23,7 @@ export default function App({ initialPage, initialLang }) {
   const [page, setPage] = useState(initialPage);
   const [lang, setLang] = useState(initialLang);
   const [showFloatingHelp, setShowFloatingHelp] = useState(false);
-  const t = useMemo(() => translations[lang] || translations.en, [lang]);
+  const t = getTranslations(lang);
   const Page = pageMap[page] || Home;
 
   useEffect(() => {
@@ -44,8 +44,9 @@ export default function App({ initialPage, initialLang }) {
   }, []);
 
   useEffect(() => {
-    const onPopState = () => {
+    const onPopState = async () => {
       const { page: nextPage, lang: nextLang } = parsePath(window.location.pathname);
+      await loadTranslations(nextLang);
       setLang(nextLang);
 
       // In-page anchor links (e.g. #process) also fire popstate; only reset scroll on a real page change.
@@ -67,8 +68,10 @@ export default function App({ initialPage, initialLang }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const navigate = (path, nextLang = lang) => {
+  const navigate = async (path, nextLang = lang) => {
     const normalized = path === "/" ? "/" : path.replace(/\/$/, "");
+
+    await loadTranslations(nextLang);
 
     window.history.pushState({}, "", buildPath(normalized, nextLang));
     setPage(normalized);

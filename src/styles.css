@@ -20,7 +20,7 @@
   --wine:#8f0018;
   --wine2:#b70b2d;
   --ink:#111419;
-  --muted:#6b7078;
+  --muted:#666a72;
   --paper:#f6f4f1;
   --line:#e6e2dd;
   --cream:#fbfaf8;
@@ -370,7 +370,7 @@ a {
 
 .card-no {
   font-size:11px;
-  color:#a4a4a4;
+  color:#757575;
   font-weight:800;
   letter-spacing:.1em
 }
@@ -633,7 +633,7 @@ a {
   padding:23px 0;
   display:flex;
   justify-content:space-between;
-  color:#656a72;
+  color:#777d86;
   font-size:12px
 }
 
@@ -765,7 +765,7 @@ a {
 .service-row small {
   font-size:10px;
   letter-spacing:.18em;
-  color:#9a9da2
+  color:#6f7278
 }
 
 .service-row h2 {
@@ -1284,7 +1284,7 @@ a {
 }
 
 .journey-step>span {
-  color:#aaa39d;
+  color:#7c736c;
   font-size:10px;
   font-weight:800;
   letter-spacing:.12em
@@ -1473,7 +1473,7 @@ a {
 
 .emergency-number small,
 .emergency-number span {
-  color:#797d84
+  color:#72757c
 }
 
 .emergency-number small {
@@ -2851,7 +2851,7 @@ img, svg {
 
 /* Footer credit link */
 .footer-main .footer-credit {
-  color: #656a72;
+  color: #777d86;
   font-size: inherit;
   line-height: inherit;
   margin: 0;

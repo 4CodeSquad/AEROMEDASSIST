@@ -1,0 +1,5 @@
+#!/bin/sh
+# Keep src/data/lastmod.json (sitemap <lastmod> dates) in step with the content being committed.
+# Enabled by `npm install` (the "prepare" script sets core.hooksPath to .githooks).
+node scripts/sitemap-dates.js || exit 1
+git add src/data/lastmod.json

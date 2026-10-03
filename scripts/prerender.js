@@ -1,7 +1,8 @@
-import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { contentHash } from "./content-hash.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const dist = path.join(root, "dist");
@@ -38,20 +39,18 @@ function renderPage(page, lang, { notFound = false } = {}) {
   return html;
 }
 
-function git(args) {
-  try {
-    return execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }).trim();
-  } catch {
-    return "";
-  }
-}
-
-// Sitemap <lastmod> = date of the last commit touching the page's own source and locale files.
-// A shallow clone would report the clone boundary for older files, so without full history it is left out.
-const fullHistory = git(["rev-parse", "--is-shallow-repository"]) === "false";
-if (!fullHistory) console.warn("Prerender: full git history not available, sitemap <lastmod> omitted");
-const lastmodFor = (page, lang) =>
-  fullHistory ? git(["log", "-1", "--format=%cs", "--", ...pageSourceFiles(page, lang)]) || null : null;
+// Sitemap <lastmod> comes from src/data/lastmod.json (kept current by scripts/sitemap-dates.js),
+// used only while its hash still matches the page's source files; otherwise the build date.
+const recorded = JSON.parse(await fs.readFile(path.join(root, "src/data/lastmod.json"), "utf8").catch(() => "{}"));
+const buildDate = new Date().toISOString().slice(0, 10);
+const stale = [];
+const lastmodFor = (page, lang) => {
+  const files = pageSourceFiles(page, lang);
+  const entry = recorded[`${page}|${lang}`];
+  if (entry && entry.hash === contentHash(files, (file) => readFileSync(path.join(root, file), "utf8"))) return entry.date;
+  stale.push(`${page}|${lang}`);
+  return buildDate;
+};
 
 async function write(file, contents) {
   const target = path.join(dist, file);
@@ -65,6 +64,7 @@ for (const { page, lang, path: routePath } of routes) {
 
 await write("404.html", renderPage(NOT_FOUND, "en", { notFound: true }));
 await write("sitemap.xml", buildSitemap(lastmodFor));
+if (stale.length) console.warn(`Prerender: src/data/lastmod.json is out of date for ${stale.length} page(s), used the build date. Run npm run sitemap-dates and commit.`);
 await write("robots.txt", buildRobots());
 await write("llms.txt", buildLlmsTxt());
 await fs.rm(ssrDir, { recursive: true, force: true });

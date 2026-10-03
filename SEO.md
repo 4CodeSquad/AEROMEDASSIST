@@ -4,6 +4,7 @@ The site is a Vite + React app that is **prerendered to static HTML** at build t
 
 ```
 npm run build
+  0. node scripts/sitemap-dates.js -> src/data/lastmod.json (skipped without full git history)
   1. vite build                    -> dist/ (client JS/CSS, one chunk per language)
   2. vite build --ssr              -> dist-ssr/entry-server.js (temporary)
   3. node scripts/prerender.js     -> dist/**/*.html for every page x language,
@@ -58,7 +59,11 @@ Rules: only mark up what is visibly on the page. Never add `Review`/`AggregateRa
 ## Sitemap, robots, llms.txt
 
 - `sitemap.xml` lists every **indexable** page in every language, with `xhtml:link` hreflang alternates.
-- `<lastmod>` is the date of the last git commit that touched the page's source files plus its locale file (`pageSources` in `src/seo.js`). Without full git history (no `.git` or a shallow clone) it is omitted rather than guessed. After the first Vercel deploy, check that `/sitemap.xml` has `<lastmod>`. If it doesn't, the build has no full git history.
+- `<lastmod>` is the date a page's content last changed. "Content" means the page's source files plus its locale file (`pageSources` in `src/seo.js`).
+  - Vercel builds from a shallow clone, so the dates can't be worked out there. Instead they are recorded in the committed **`src/data/lastmod.json`**: one entry per page × language, holding the date and a hash of those files.
+  - `scripts/sitemap-dates.js` writes that file. It describes the staged content: if a page's files are staged and differ from HEAD, the date is today; otherwise it is the date of the last commit touching them.
+  - **It runs automatically** from the pre-commit hook (`.githooks/pre-commit`, which also stages the file) and at the start of every `npm run build`. The hook is switched on by `npm install` (the `prepare` script sets `core.hooksPath`). After a fresh clone, run `npm install` once before committing. To run it by hand: `npm run sitemap-dates`.
+  - At build time the prerender uses the recorded date only if the hash still matches the files being built. Otherwise it uses the build date and warns "lastmod.json is out of date". That can happen if someone commits with `--no-verify` or without having run `npm install`. Fix it with `npm run sitemap-dates` and commit.
 - `robots.txt` allows everything (including AI crawlers) and links the sitemap.
 - `llms.txt` summarizes the business and key pages for AI assistants. `TODO(client)` lines in `buildLlmsTxt` must be replaced with confirmed facts before launch.
 

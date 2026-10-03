@@ -5,8 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js",
-    "preview": "vite preview"
+    "build": "node scripts/sitemap-dates.js && vite build && vite build --ssr src/entry-server.jsx --outDir dist-ssr && node scripts/prerender.js",
+    "preview": "vite preview",
+    "sitemap-dates": "node scripts/sitemap-dates.js",
+    "prepare": "node -e \"try { require('child_process').execSync('git config core.hooksPath .githooks', { stdio: 'ignore' }) } catch {}\""
   },
   "dependencies": {
     "bootstrap": "^5.3.8",

@@ -1,0 +1,162 @@
+{
+  "/|en": {
+    "date": "2026-10-03",
+    "hash": "a093ad00d6d55f8b"
+  },
+  "/about|en": {
+    "date": "2026-10-03",
+    "hash": "92a86e0e613f9bee"
+  },
+  "/services|en": {
+    "date": "2026-10-03",
+    "hash": "ca5dfcbeb007ce51"
+  },
+  "/services/air-ambulance|en": {
+    "date": "2026-10-03",
+    "hash": "9a064306dd24ba68"
+  },
+  "/services/medical-escort|en": {
+    "date": "2026-10-03",
+    "hash": "9a064306dd24ba68"
+  },
+  "/services/repatriation|en": {
+    "date": "2026-10-03",
+    "hash": "9a064306dd24ba68"
+  },
+  "/services/ground-ambulance|en": {
+    "date": "2026-10-03",
+    "hash": "9a064306dd24ba68"
+  },
+  "/contact|en": {
+    "date": "2026-10-03",
+    "hash": "97e7a77129a2bfd7"
+  },
+  "/|sq": {
+    "date": "2026-10-03",
+    "hash": "52b2686d26dab86e"
+  },
+  "/about|sq": {
+    "date": "2026-10-03",
+    "hash": "237a5eb508c954a7"
+  },
+  "/services|sq": {
+    "date": "2026-10-03",
+    "hash": "c9ce5a171ae96700"
+  },
+  "/services/air-ambulance|sq": {
+    "date": "2026-10-03",
+    "hash": "e01fca7b09bedb7c"
+  },
+  "/services/medical-escort|sq": {
+    "date": "2026-10-03",
+    "hash": "e01fca7b09bedb7c"
+  },
+  "/services/repatriation|sq": {
+    "date": "2026-10-03",
+    "hash": "e01fca7b09bedb7c"
+  },
+  "/services/ground-ambulance|sq": {
+    "date": "2026-10-03",
+    "hash": "e01fca7b09bedb7c"
+  },
+  "/contact|sq": {
+    "date": "2026-10-03",
+    "hash": "2254e834e0cd4c25"
+  },
+  "/|it": {
+    "date": "2026-10-03",
+    "hash": "55150189a97ee4db"
+  },
+  "/about|it": {
+    "date": "2026-10-03",
+    "hash": "97f9e15bbc6beb8b"
+  },
+  "/services|it": {
+    "date": "2026-10-03",
+    "hash": "e58d94c40ab0ab69"
+  },
+  "/services/air-ambulance|it": {
+    "date": "2026-10-03",
+    "hash": "8c2899f0d3856aa4"
+  },
+  "/services/medical-escort|it": {
+    "date": "2026-10-03",
+    "hash": "8c2899f0d3856aa4"
+  },
+  "/services/repatriation|it": {
+    "date": "2026-10-03",
+    "hash": "8c2899f0d3856aa4"
+  },
+  "/services/ground-ambulance|it": {
+    "date": "2026-10-03",
+    "hash": "8c2899f0d3856aa4"
+  },
+  "/contact|it": {
+    "date": "2026-10-03",
+    "hash": "49e7cd975f910d3f"
+  },
+  "/|de": {
+    "date": "2026-10-03",
+    "hash": "a83ed2bac07ac228"
+  },
+  "/about|de": {
+    "date": "2026-10-03",
+    "hash": "9728fb9aa9ea42cd"
+  },
+  "/services|de": {
+    "date": "2026-10-03",
+    "hash": "e03ad178eb919ad6"
+  },
+  "/services/air-ambulance|de": {
+    "date": "2026-10-03",
+    "hash": "e4a5e25864bdc8aa"
+  },
+  "/services/medical-escort|de": {
+    "date": "2026-10-03",
+    "hash": "e4a5e25864bdc8aa"
+  },
+  "/services/repatriation|de": {
+    "date": "2026-10-03",
+    "hash": "e4a5e25864bdc8aa"
+  },
+  "/services/ground-ambulance|de": {
+    "date": "2026-10-03",
+    "hash": "e4a5e25864bdc8aa"
+  },
+  "/contact|de": {
+    "date": "2026-10-03",
+    "hash": "24516d4d1ca8081b"
+  },
+  "/|fr": {
+    "date": "2026-10-03",
+    "hash": "2da8cd823199286b"
+  },
+  "/about|fr": {
+    "date": "2026-10-03",
+    "hash": "b086c9d22563df97"
+  },
+  "/services|fr": {
+    "date": "2026-10-03",
+    "hash": "25f354182f910510"
+  },
+  "/services/air-ambulance|fr": {
+    "date": "2026-10-03",
+    "hash": "ab0e80ba89fcbe6f"
+  },
+  "/services/medical-escort|fr": {
+    "date": "2026-10-03",
+    "hash": "ab0e80ba89fcbe6f"
+  },
+  "/services/repatriation|fr": {
+    "date": "2026-10-03",
+    "hash": "ab0e80ba89fcbe6f"
+  },
+  "/services/ground-ambulance|fr": {
+    "date": "2026-10-03",
+    "hash": "ab0e80ba89fcbe6f"
+  },
+  "/contact|fr": {
+    "date": "2026-10-03",
+    "hash": "06a503b81f728801"
+  }
+}
